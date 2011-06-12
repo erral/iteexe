@@ -103,54 +103,54 @@ class WebServer:
                 found_port = 1
                 port_test_done = 1
             except CannotListenError, exc:
-                log.debug("find_port(): caught exception after listenTCP " \
-                         + "on port# %d, exception = %s", test_port_num, exc)
-                last_exception = exc
+                #log.debug("find_port(): caught exception after listenTCP " \
+                #         + "on port# %d, exception = %s", test_port_num, exc)
+                #last_exception = exc
                 ###########################
                 # Since we can connect to this port, see if it's already 
                 # running an eXe server, as we only want 1 running at a time:
                 #
-                test_this_host = "127.0.0.1"
-                log.debug("find_port(): appears that a service is already " \
-                      + "running on port# %d, seeing if it is another eXe", \
-                      test_port_num)
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.connect((test_this_host, test_port_num))
+                #test_this_host = "127.0.0.1"
+                #log.debug("find_port(): appears that a service is already " \
+                #      + "running on port# %d, seeing if it is another eXe", \
+                #      test_port_num)
+                #s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                #s.connect((test_this_host, test_port_num))
                 # unset any blocking:
-                s.setblocking(0)
+                #s.setblocking(0)
                 # set timeout to reasonably "large enough", but not "too 
                 # large" (note that google, e.g., sometimes requires 3secs):
-                s.settimeout(3)                
+                #s.settimeout(3)                
                 # and send a basic HTTP request to obtain the server info:
-                s.send('GET / HTTP/1.0\r\n\r\n')
-                try:
-                    data = s.recv(1024)
-                    log.debug("find_port(): socket test of existing port " \
-                            + "gave result of: %s", repr(data))
-                    exe_server_string = "Server: eXeTwistedWeb/" 
-                    # above followed by the actual TwistedWeb version number
-                    exe_server_string_pos = data.find(exe_server_string)
-                    if exe_server_string_pos >= 0:
-                        log.debug("find_port(): appears that another eXe " \
-                           + "server is running on port# %d; terminating.", \
-                           test_port_num)
-                        found_other_eXe = 1                        
-                        port_test_done = 1
-                    else:
-                        log.debug("find_port(): port# %d not in use by a newer eXe server, but checking if it is Twisted server, in general...", test_port_num)
-                        # or, for older versions of eXe, check for regular ol' TwistedWeb server:
-                        twisted_server_string = "Server: TwistedWeb/" # followed by the Actual TwistedWeb version number
-                        twisted_server_string_pos = data.find(twisted_server_string)
-                        if twisted_server_string_pos >= 0:
-                            log.debug("find_port(): appears that an earlier version of an eXe server might already running on port# %d; terminating.", test_port_num)
-                            found_other_eXe = 1                        
-                            port_test_done = 1
-                except socket.error, msg:
-                    log.debug("find_port(): timeout on socket port# %d, " \
-                            + "probably not an eXe so continuing search.  " \
-                            + "[timeout exception = %s]", test_port_num, \
-                            str(msg))
-                s.close()  
+                #s.send('GET / HTTP/1.0\r\n\r\n')
+                #try:
+                #    data = s.recv(1024)
+                #    log.debug("find_port(): socket test of existing port " \
+                #            + "gave result of: %s", repr(data))
+                #    exe_server_string = "Server: eXeTwistedWeb/" 
+                #    # above followed by the actual TwistedWeb version number
+                #    exe_server_string_pos = data.find(exe_server_string)
+                #    if exe_server_string_pos >= 0:
+                #        log.debug("find_port(): appears that another eXe " \
+                #           + "server is running on port# %d; terminating.", \
+                #           test_port_num)
+                #        found_other_eXe = 1                        
+                #        port_test_done = 1
+                #    else:
+                #        log.debug("find_port(): port# %d not in use by a newer eXe server, but checking if it is Twisted server, in general...", test_port_num)
+                #        # or, for older versions of eXe, check for regular ol' TwistedWeb server:
+                #        twisted_server_string = "Server: TwistedWeb/" # followed by the Actual TwistedWeb version number
+                #        twisted_server_string_pos = data.find(twisted_server_string)
+                #        if twisted_server_string_pos >= 0:
+                #            log.debug("find_port(): appears that an earlier version of an eXe server might already running on port# %d; terminating.", test_port_num)
+                #            found_other_eXe = 1                        
+                #            port_test_done = 1
+                #except socket.error, msg:
+                #    log.debug("find_port(): timeout on socket port# %d, " \
+                #            + "probably not an eXe so continuing search.  " \
+                #            + "[timeout exception = %s]", test_port_num, \
+                #            str(msg))
+                #s.close()  
                 #
                 ##########################
                 test_port_count += 1
